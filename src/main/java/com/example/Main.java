@@ -15,26 +15,20 @@
  */
 
 package com.example;
-import static javax.measure.unit.SI.KILOGRAM;
-import javax.measure.quantity.Mass;
-import org.jscience.physics.model.RelativisticModel;
-import org.jscience.physics.amount.Amount;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 
-import Building.WriteXmlFile;
-import Outils.CLI;
-import Outils.PageRank;
-import Outils.Pair;
-import Traitement.Factory;
-import Traitement.MyXmlHandler;
-import Traitement.ReadXmlFile;
 
+import Building.*;
+import Outils.*;
+import Traitement.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,40 +47,38 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @SpringBootApplication
 public class Main {
 
-  @Value("${spring.datasource.url}")
-  private String dbUrl;
 
-  // @Autowired
-  //private DataSource dataSource;
 
-   private static Getter getter;
+
+  private PageServices pageService= new PageServices();
+  private static Getter getter;
   
   
   public static void main(String[] args) throws Exception {
     SpringApplication.run(Main.class, args);
     deploy();
     
-  
   }
 
-  @RequestMapping("/")
-  String index() {
-    return "index";
-  }
-  
-  
+
   
   private static void deploy() {
 	  getter= new Getter();
 	  getter.start();
   }
+  
+  
   private static void init() {
 	  
 	  WriteXmlFile filexml = WriteXmlFile.getInsance();
@@ -168,88 +160,58 @@ public class Main {
 	  
 	  
   }
-  @RequestMapping("/hello")
-  String hello(Map<String, Object> model) {
-      RelativisticModel.select();
-      Amount<Mass> m = Amount.valueOf("12 GeV").to(KILOGRAM);
-      model.put("science", "E=mc^2: 12 GeV = " + m.toString());
-      return "hello";
-  }
-
-  @PostMapping("/test")
-  public String ess (Map<String, Object> model) {
-	  System.out.println(model.size());
-	  
-  return "success";
-  }
-  @RequestMapping("/test")
-  String test (Map<String, Object> model) {
-     
+  
+  
+  
+  @RequestMapping("/")
+  String test (Map<String, Object> model , @RequestParam("page") Optional<Integer> page, 
+	      @RequestParam("size") Optional<Integer> size) {
+	  List<String> list = new ArrayList<String>();
+	  List<Integer> pageNumbers = new ArrayList<>();
+	  int currentPage = page.orElse(1);
+      int pageSize = size.orElse(5); 
+	  Page<String> listPages = pageService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
+	  ((Model) model).addAttribute("pageNumbers", pageNumbers);
+	  ((Model) model).addAttribute("listPages", listPages);
      
       return "Accueil";
   }
-  /*
-  @RequestMapping("/db")
-  String db(Map<String, Object> model) {
-    try (Connection connection = dataSource.getConnection()) {
-      Statement stmt = connection.createStatement();
-      stmt.executeUpdate("CREATE TABLE IF NOT EXISTS ticks (tick timestamp)");
-      stmt.executeUpdate("INSERT INTO ticks VALUES (now())");
-      ResultSet rs = stmt.executeQuery("SELECT tick FROM ticks");
-
-      ArrayList<String> output = new ArrayList<String>();
-      while (rs.next()) {
-        output.add("Read from DB: " + rs.getTimestamp("tick"));
-      }
-
-      model.put("records", output);
-      return "db";
-    } catch (Exception e) {
-      model.put("message", e.getMessage());
-      return "error";
-    }
-  }*/
+ 
   
-  
-  @RequestMapping(value = "/searching", method = RequestMethod.POST)
-  public String search(@RequestParam Map<String, Object>request,Map<String, Object> model) {
-	  
-	  
-	  
+  @RequestMapping(value = "/", method = RequestMethod.POST)
+  public String searching(@RequestParam Map<String, Object>request,Map<String, Object> model,
+		  @RequestParam("page") Optional<Integer> page, 
+	      @RequestParam("size") Optional<Integer> size) {
+      int currentPage = page.orElse(1);
+      int pageSize = size.orElse(5); 
 	  
 	  
 	  String requette =(String) request.get("search");
-	  System.out.println(requette);
+	  
 
 	  ArrayList<Pair<String,String>> pages =new ArrayList<Pair<String,String>>();
+	  pages=pageService.getPages(requette);
+	  Page<String> listPages = pageService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
+
+      ((Model) model).addAttribute("listPages", listPages);
+
+      int totalPages = listPages.getTotalPages();
+      if (totalPages > 0) {
+          List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+              .boxed()
+              .collect(Collectors.toList());
+          ((Model) model).addAttribute("pageNumbers", pageNumbers);
+      }
+
+      model.put("pages",pages);
+	  System.out.println(listPages.getSize());
 	  
-	  System.out.println(getter.Mapper.size());
-	  if(getter.Mapper.containsKey(requette.trim())) {
-		 ArrayList<String> tmp =getter.Mapper.get(requette);
-		 for (int i = 0; i < tmp.size(); i++) {
-			Pair<String ,String> pair = new Pair<String,String>(tmp.get(i),"HHHHHHHHHH");
-			pages.add(pair);
-		}
-		  
-	  }
-	  
-	  
-	    model.put("pages",pages);
+	   
 	 
-	  return "bingo";
+	  return "Accueil";
 	 
   }  
   
-  /*
-  @Bean
-  public DataSource dataSource() throws SQLException {
-    if (dbUrl == null || dbUrl.isEmpty()) {
-      return new HikariDataSource();
-    } else {
-      HikariConfig config = new HikariConfig();
-      config.setJdbcUrl(dbUrl);
-      return new HikariDataSource(config);
-    }
-  }*/
+  
 
 }

@@ -4,6 +4,7 @@ package com.example;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import org.springframework.util.StringUtils;
 import org.xml.sax.Attributes;
 
 import org.xml.sax.SAXException;
@@ -66,7 +67,14 @@ public class MyXmlCollect extends DefaultHandler {
 	}
 	
 	private void add() {
-		page.add(title);
+		String [] parts = title.split("\\s+");
+		String str=StringUtils.capitalize(parts[0]);;
+		for (int i = 1; i < parts.length; i++) {
+			
+			str+="_"+StringUtils.capitalize(parts[i]);
+		}
+		
+		page.add(str);
 		title="";
 		frequence=0;
 		Bmot=false;

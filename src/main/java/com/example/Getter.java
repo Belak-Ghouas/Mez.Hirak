@@ -25,6 +25,7 @@ public class Getter {
 	public void start() {
 		try {
 			readxmlFile.saxParser.parse(new File(COLLECT_PATH), myxmlHandler);
+			System.out.println(Mapper.size());
 		} catch (SAXException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
