@@ -1,60 +1,114 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'index')}">
+<html xmlns:th="http://www.thymeleaf.org">
 
+<head>
+<link rel="stylesheet" type="text/css"
+	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link
+	href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900"
+	rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Poppins"
+	rel="stylesheet" />
+<link href="/stylesheets/accueil.css" rel="stylesheet" />
+</head>
 <body>
 
-<div class="jumbotron text-center">
-  <div class="container">
-    <a href="/" class="lang-logo">
-      <img src="/lang-logo.png">
-    </a>
-    <h1>Getting Started with Java on Heroku</h1>
-    <p>This is a sample Java application deployed to Heroku. It's a reasonably simple app - but a good foundation for understanding how to get the most out of the Heroku platform.</p>
-    <a type="button" class="btn btn-lg btn-default" href="https://devcenter.heroku.com/articles/getting-started-with-java"><span class="glyphicon glyphicon-flash"></span> Getting Started with Java</a>
-    <a type="button" class="btn btn-lg btn-primary" href="https://github.com/heroku/java-getting-started"><span class="glyphicon glyphicon-download"></span> Source on GitHub</a>
-  </div>
-</div>
-<div class="container">
-  <div class="alert alert-info text-center" role="alert">
-    To deploy your own copy, and learn the fundamentals of the Heroku platform, head over to the <a href="https://devcenter.heroku.com/articles/getting-started-with-java" class="alert-link">Getting Started with Java on Heroku</a> tutorial.
-  </div>
-  <hr>
-  <div class="row">
-    <div class="col-md-6">
-      <h3><span class="glyphicon glyphicon-info-sign"></span> How this sample app works</h3>
-      <ul>
-        <li>This app was deployed to Heroku, either using Git or by using <a href="https://github.com/heroku/java-getting-started">Heroku Button</a> on the repository.</li>
+	<div class="s130">
+		<form th:action="@{/}" method="post">
+			<div class="inner-form">
+				<div class="input-field first-wrap">
+					<div class="svg-wrapper">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+							viewBox="0 0 24 24">
+                <path
+								d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+              </svg>
+					</div>
+					<input name="search" type="text"
+						placeholder="What are you looking for?" />
+				</div>
+				<div class="input-field second-wrap">
+					<button class="btn-search" type="submit">SEARCH</button>
+				</div>
+			</div>
+			<span class="info">ex. Acteur, Musique,Spectacle</span>
 
-        <li>When Heroku received the source code, it fetched all the dependencies in the <a href="https://github.com/heroku/java-getting-started/blob/master/pom.xml">pom.xml</a>, creating a slug.</li>
-        <li>The platform then spins up a dyno, a lightweight container that provides an isolated environment in which the slug can be mounted and executed.</li>
-        <li>You can scale your app, manage it, and deploy over <a href="https://addons.heroku.com/">150 add-on services</a>, from the Dashboard or CLI.</li>
-      </ul>
-    </div>
-    <div class="col-md-6">
-      <h3><span class="glyphicon glyphicon-link"></span> Next Steps</h3>
-      <ul>
-        <li>If you are following the <a href="https://devcenter.heroku.com/articles/getting-started-with-java">Getting Started</a> guide, then please head back to the tutorial and follow the next steps!</li>
-        <li>If you deployed this app by deploying the Heroku Button, then in a command line shell, run:</li>
-        <ul>
-          <li><code>git clone https://github.com/heroku/java-getting-started.git</code> - this will create a local copy of the source code for the app</li>
-          <li><code>cd java-getting-started</code> - change directory into the local source code repository</li>
-          <li><code>heroku git:remote -a &lt;your-app-name></code> - associate the Heroku app with the repository</li>
-          <li>You'll now be set up to run the app locally, or <a href="https://devcenter.heroku.com/articles/getting-started-with-java#push-local-changes">deploy changes</a> to Heroku</li>
-        </ul>
-      </ul>
-      <h3><span class="glyphicon glyphicon-link"></span> Helpful Links</h3>
-      <ul>
-        <li><a href="https://www.heroku.com/home">Heroku</a></li>
-        <li><a href="https://devcenter.heroku.com/">Heroku Dev Center</a></li>
-        <li><a href="https://devcenter.heroku.com/articles/getting-started-with-java">Getting Started with Java on Heroku</a></li>
-        <li><a href="https://devcenter.heroku.com/articles/deploying-java">Deploying Java Apps on Heroku</a></li>
-      </ul>
-    </div>
-  </div> <!-- row -->
-   <div class="alert alert-info text-center" role="alert">
-    Please do work through the Getting Started guide, even if you do know how to build such an application.  The guide covers the basics of working with Heroku, and will familiarize you with all the concepts you need in order to build and deploy your own apps.
-  </div>
-</div>
+
+			<div class="row">
+				<div class="col-sm-5 col-sm-push-1">
+					<div id="notfound" th:if="${notfound}">
+						<div class="notfound">
+							<div class="notfound-404">
+								<h1>Oops!</h1>
+							</div>
+							<h2>404 - Page not found</h2>
+							<p>le mot insérer n'existe pas dans mon dictionnaire.</p>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+
+				<div class="col-sm-5 col-sm-push-1">
+
+					<div class="list-group">
+
+						<th:block th:each="page : ${listPages}">
+
+							<a th:href="|https://fr.wikipedia.org/wiki/${page}|">
+
+								<p th:utext="${page}"></p>
+
+							</a>
+							<h6 th:text="|https://fr.wikipedia.org/wiki/${page}|"></h6>
+							<br>
+						</th:block>
+					</div>
+
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-5 col-sm-push-1">
+					<ul class="pagination justify-content-center font-weight-medium"
+						th:style="${listPages.totalPages lt 1} ? 'display: none'  ">
+
+						<li class="page-item"
+							th:classappend="${listPages.number eq 0} ? 'disabled'"><a
+							class="page-link svg-icon"
+							th:href="@{/?page={id}(id=${listPages.number lt 2 ? 1 : listPages.number})}"
+							aria-label="Previous" title="Previous Page" rel="tooltip"> <span
+								aria-hidden="true" class="glyphicon glyphicon-chevron-left"
+								width="20" height="20"> </span>
+						</a></li>
+						<li class="page-item"
+							th:classappend="${i eq listPages.number + 1} ? 'active'"
+							th:each="i : ${#numbers.sequence( listPages.number + 1, listPages.totalPages > 10 + listPages.number ? listPages.number + 10 : listPages.totalPages, 1)}">
+							<a class="page-link" th:href="@{/?page={id}(id=${i})}"
+							th:text="${i}" th:title="${'Page '+ i}" rel="tooltip"></a>
+						</li>
+
+						<li class="page-item"
+							th:classappend="${listPages.number + 1 ge listPages.totalPages} ? 'disabled'">
+							<a class="page-link svg-icon"
+							th:href="@{/?page={id}(id=${listPages.number + 2})}"
+							aria-label="Next" title="Next Page" rel="tooltip"> <span
+								class="glyphicon glyphicon-chevron-right" width="20" height="20"></span></a>
+						</li>
+					</ul>
+
+				</div>
+
+			</div>
+		</form>
+	</div>
+
+
+
+
 
 </body>
 </html>

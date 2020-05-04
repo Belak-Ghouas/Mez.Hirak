@@ -163,7 +163,7 @@ public class Main {
   
   
   
-  @RequestMapping("/")
+  @RequestMapping(value = "/", method = RequestMethod.GET)
   String test (Map<String, Object> model , @RequestParam("page") Optional<Integer> page, 
 	      @RequestParam("size") Optional<Integer> size) {
 	  List<String> list = new ArrayList<String>();
@@ -173,8 +173,8 @@ public class Main {
 	  Page<String> listPages = pageService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
 	  ((Model) model).addAttribute("pageNumbers", pageNumbers);
 	  ((Model) model).addAttribute("listPages", listPages);
-     
-      return "Accueil";
+	  ((Model) model).addAttribute("notfound", false);
+      return "index";
   }
  
   
@@ -182,15 +182,13 @@ public class Main {
   public String searching(@RequestParam Map<String, Object>request,Map<String, Object> model,
 		  @RequestParam("page") Optional<Integer> page, 
 	      @RequestParam("size") Optional<Integer> size) {
+	  boolean notfound ;
       int currentPage = page.orElse(1);
       int pageSize = size.orElse(5); 
 	  
 	  
 	  String requette =(String) request.get("search");
-	  
-
-	  ArrayList<Pair<String,String>> pages =new ArrayList<Pair<String,String>>();
-	  pages=pageService.getPages(requette);
+	  pageService.getPages(requette);
 	  Page<String> listPages = pageService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
 
       ((Model) model).addAttribute("listPages", listPages);
@@ -203,12 +201,12 @@ public class Main {
           ((Model) model).addAttribute("pageNumbers", pageNumbers);
       }
 
-      model.put("pages",pages);
-	  System.out.println(listPages.getSize());
-	  
+  
+      notfound= true ? listPages.getTotalPages()<=0 : false ;
+	  ((Model) model).addAttribute("notfound", notfound);
 	   
 	 
-	  return "Accueil";
+	  return "index";
 	 
   }  
   

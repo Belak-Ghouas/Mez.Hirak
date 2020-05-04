@@ -44,30 +44,17 @@ public class PageServices {
 	public ArrayList<Pair<String, String>> getPages(String request) {
 
 		ArrayList<Pair<String, String>> Pairpages = new ArrayList<Pair<String, String>>();
+		this.pages = new ArrayList<String>();
+		if(Getter.Mapper.containsKey(request)) {
+			this.pages = Getter.Mapper.get(request);
+			
 
-		this.pages = Getter.Mapper.get(request);
-		
-		this.pages.add("aaa");
-this.pages.add("aaa");
-this.pages.add("aaa");
-this.pages.add("aaa");
-this.pages.add("aaa");
-this.pages.add("aaa");
-this.pages.add("aaa");
-this.pages.add("aaa");
-	
-		this.pages.add("aaa");
-this.pages.add("aaa");
-this.pages.add("aaa");
-this.pages.add("aaa");
-this.pages.add("aaa");
-this.pages.add("aaa");
-this.pages.add("aaa");
-this.pages.add("aaa");
-		for (int i = 0; i < this.pages.size(); i++) {
-			Pair<String, String> pair = new Pair<String, String>(this.pages.get(i), "HHHHHHHHHH");
-			Pairpages.add(pair);
+			for (int i = 0; i < this.pages.size(); i++) {
+				Pair<String, String> pair = new Pair<String, String>(this.pages.get(i), "HHHHHHHHHH");
+				Pairpages.add(pair);
+			}
 		}
+		
 
 		return Pairpages;
 

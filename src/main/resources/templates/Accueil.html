@@ -15,7 +15,7 @@
 	<div class="col-lg-12">
 		<div class="row">
 
-			<div class="col-sm-5 col-sm-push-4">
+			<div class="col-sm-6 col-sm-push-4">
 
 				<form th:action="@{/}" method="post">
 
@@ -36,9 +36,9 @@
 			</div>
 		</div>
 
-		<div class="col-lg-12">
+		<div class="row">
 
-			<div class="col-lg-6 col-lg-push-2">
+			<div class="col-sm-5 col-sm-push-4">
 
 				<div class="list-group">
 
@@ -51,43 +51,45 @@
 							</p>
 
 						</a>
+						<h6 th:text="|https://fr.wikipedia.org/wiki/${page}|"></h6>
 						<br>
 					</th:block>
 				</div>
 
-
-
-				<div class="col-lg-6 col-lg-push-2">
-
-					<ul class="pagination justify-content-center font-weight-medium"
-						th:style="${listPages.totalPages lt 1} ? 'display: none'  ">
-
-						<li class="page-item"
-							th:classappend="${listPages.number eq 0} ? 'disabled'"><a
-							class="page-link svg-icon"
-							th:href="@{/?page={id}(id=${listPages.number lt 2 ? 1 : listPages.number})}"
-							aria-label="Previous" title="Previous Page" rel="tooltip"> <span
-								aria-hidden="true" class="glyphicon glyphicon-chevron-left"
-								width="20" height="20"> </span>
-						</a></li>
-						<li class="page-item"
-							th:classappend="${i eq listPages.number + 1} ? 'active'"
-							th:each="i : ${#numbers.sequence( listPages.number + 1, listPages.totalPages > 10 + listPages.number ? listPages.number + 10 : listPages.totalPages, 1)}">
-							<a class="page-link" th:href="@{/?page={id}(id=${i})}"
-							th:text="${i}" th:title="${'Page '+ i}" rel="tooltip"></a>
-						</li>
-
-						<li class="page-item"
-							th:classappend="${listPages.number + 1 ge listPages.totalPages} ? 'disabled'">
-							<a class="page-link svg-icon"
-							th:href="@{/?page={id}(id=${listPages.number + 2})}"
-							aria-label="Next" title="Next Page" rel="tooltip"> <span
-								class="glyphicon glyphicon-chevron-right" width="20" height="20"></span></a>
-						</li>
-					</ul>
-
-				</div>
 			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-5 col-sm-push-4">
+				<ul class="pagination justify-content-center font-weight-medium"
+					th:style="${listPages.totalPages lt 1} ? 'display: none'  ">
+
+					<li class="page-item"
+						th:classappend="${listPages.number eq 0} ? 'disabled'"><a
+						class="page-link svg-icon"
+						th:href="@{/?page={id}(id=${listPages.number lt 2 ? 1 : listPages.number})}"
+						aria-label="Previous" title="Previous Page" rel="tooltip"> <span
+							aria-hidden="true" class="glyphicon glyphicon-chevron-left"
+							width="20" height="20"> </span>
+					</a></li>
+					<li class="page-item"
+						th:classappend="${i eq listPages.number + 1} ? 'active'"
+						th:each="i : ${#numbers.sequence( listPages.number + 1, listPages.totalPages > 10 + listPages.number ? listPages.number + 10 : listPages.totalPages, 1)}">
+						<a class="page-link" th:href="@{/?page={id}(id=${i})}"
+						th:text="${i}" th:title="${'Page '+ i}" rel="tooltip"></a>
+					</li>
+
+					<li class="page-item"
+						th:classappend="${listPages.number + 1 ge listPages.totalPages} ? 'disabled'">
+						<a class="page-link svg-icon"
+						th:href="@{/?page={id}(id=${listPages.number + 2})}"
+						aria-label="Next" title="Next Page" rel="tooltip"> <span
+							class="glyphicon glyphicon-chevron-right" width="20" height="20"></span></a>
+					</li>
+				</ul>
+
 			</div>
+
+		</div>
+	</div>	
 </body>
 </html>
