@@ -166,6 +166,7 @@ public class Main {
   @RequestMapping(value = "/", method = RequestMethod.GET)
   String test (Map<String, Object> model , @RequestParam("page") Optional<Integer> page, 
 	      @RequestParam("size") Optional<Integer> size) {
+	  long time = System.currentTimeMillis();
 	  List<String> list = new ArrayList<String>();
 	  List<Integer> pageNumbers = new ArrayList<>();
 	  int currentPage = page.orElse(1);
@@ -174,6 +175,8 @@ public class Main {
 	  ((Model) model).addAttribute("pageNumbers", pageNumbers);
 	  ((Model) model).addAttribute("listPages", listPages);
 	  ((Model) model).addAttribute("notfound", false);
+	  time =(System.currentTimeMillis() -time)  ;
+	  ((Model) model).addAttribute("time", time);
       return "index";
   }
  
@@ -182,6 +185,8 @@ public class Main {
   public String searching(@RequestParam Map<String, Object>request,Map<String, Object> model,
 		  @RequestParam("page") Optional<Integer> page, 
 	      @RequestParam("size") Optional<Integer> size) {
+	  
+	  long time = System.currentTimeMillis();
 	  boolean notfound ;
       int currentPage = page.orElse(1);
       int pageSize = size.orElse(5); 
@@ -201,11 +206,13 @@ public class Main {
           ((Model) model).addAttribute("pageNumbers", pageNumbers);
       }
 
-  
+       time =(System.currentTimeMillis() -time)  ;
+      
       notfound= true ? listPages.getTotalPages()<=0 : false ;
 	  ((Model) model).addAttribute("notfound", notfound);
-	   
-	 
+
+	  ((Model) model).addAttribute("time", time);
+	 System.out.println(time);
 	  return "index";
 	 
   }  

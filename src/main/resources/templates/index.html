@@ -34,8 +34,9 @@
 					<button class="btn-search" type="submit">SEARCH</button>
 				</div>
 			</div>
-			<span class="info">ex. Acteur, Musique,Spectacle</span>
-
+			<span class="info"  th:if="${time}" th:text="|${time} milliseconds|"></span>
+			<span class="info"   th:unless="${time}">ex. Acteur, Musique,Spectacle</span>
+			
 
 			<div class="row">
 				<div class="col-sm-5 col-sm-push-1">

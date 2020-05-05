@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 
 
 import Outils.*;
+import Traitement.Factory;
 
 public class PageServices {
 
@@ -43,17 +44,24 @@ public class PageServices {
 
 	public ArrayList<Pair<String, String>> getPages(String request) {
 
+		String [] parts = request.split("\\s+");
+		
 		ArrayList<Pair<String, String>> Pairpages = new ArrayList<Pair<String, String>>();
 		this.pages = new ArrayList<String>();
-		if(Getter.Mapper.containsKey(request)) {
-			this.pages = Getter.Mapper.get(request);
+		for (int i = 0; i < parts.length; i++) {
+			String mot = Factory.racine(parts[i]);
 			
+			if(Getter.Mapper.containsKey(mot)) {
+				this.pages.addAll( Getter.Mapper.get(mot));
+				
 
-			for (int i = 0; i < this.pages.size(); i++) {
-				Pair<String, String> pair = new Pair<String, String>(this.pages.get(i), "HHHHHHHHHH");
-				Pairpages.add(pair);
+				for (int j = 0; j < this.pages.size(); j++) {
+					Pair<String, String> pair = new Pair<String, String>(this.pages.get(j), "HHHHHHHHHH");
+					Pairpages.add(pair);
+				}
 			}
 		}
+		
 		
 
 		return Pairpages;
