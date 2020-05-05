@@ -76,7 +76,7 @@ public class Collecteur {
 
 			@Override
 			public int compare(Pair<String, Integer> o1, Pair<String, Integer> o2) {
-				
+				/*
 				Set entrySet =Structure.hashTable.entrySet();
 				Iterator it = entrySet.iterator();
 			     
@@ -86,7 +86,7 @@ public class Collecteur {
 			    	  Map.Entry entry = (Map.Entry) it.next();
 			    	 String mot =(String) entry.getKey();
 			         System.out.println(mot);
-			    }
+			    }*/
 				 int id1 =Structure.getPageId(o1.getKey());
 				int id2=Structure.getPageId(o2.getKey());
 				if (pageRank[id1] < pageRank[id2]) {
